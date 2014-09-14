@@ -1,6 +1,11 @@
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
-
+- '0.11'
+- '0.10'
 after_success: cat coverage/lcov.info | node_modules/.bin/coveralls --verbose
+deploy:
+  provider: heroku
+  api_key:
+    secure: MxYOuwUImLJMTghgbvwWCX1KGAg1qiRZtqub9yE3lnShmSLW2E/PbdQ7D+flPdB34UrOJld4TGpjrojqojLTXknfQ6JQIqvRRxnaqcmi1lxryWG1eJzvqGb4NrZtu6OrC4pGCgMNtYIYGpKNrM8CgAg6guLammq4THlpkTTk3Ms=
+  app:
+    master: picasso-point-server
