@@ -5,12 +5,12 @@ var WebSocketServer = ws.Server;
 var http = require('http');
 var express = require('express');
 var _ = require('lodash');
-var jrc = require('just.randomcolor');
 var app = express();
 var inputPort = 5000;
 var outputPort = 5001;
 
 var uniqueUsers = [];
+var uniqueColors = ['#abbf72', '#72bf87', '#72bfa2', '#8ebf72', '#72bf96', '#72bfa3', '#bf72a4', '#75bf72', '#bf8672', '#bfbf72', '#72bfa5', '#9f72bf', '#72bfaf', '#7872bf', '#bf727e', '#72a0bf', '#bf7279', '#a572bf', '#72bf7b', '#7299bf'];
 
 app.use(express.static(__dirname + '/'));
 
@@ -51,14 +51,7 @@ wssOutput.on('connection', function (ws) {
     /* jshint camelcase: false */
     clients.forEach(function (e) {
       try {
-        if (user) {
-          if (!doesUserExist(user)) {
-            uniqueUsers.push({
-              user: user,
-              color: new jrc()
-            });
-          }
-        }
+        msg.user = user;
         e.send(msg);
       } catch (e) {
         console.log('ohnnoes:' + e);
@@ -77,7 +70,20 @@ wssInput.on('connection', function (ws) {
   });
 
   ws.on('message', function (msg) {
+    console.log('msg from drawer');
     console.log(msg);
     connection.send(msg);
+    var user = JSON.parse(msg).user;
+    if (user) {
+      if (!doesUserExist(user)) {
+        var newUser = {
+          user: '#' + uniqueUsers.length + user,
+          color: uniqueColors[uniqueUsers.length]
+        };
+        console.log('Created user: ' + newUser.user);
+        uniqueUsers.push(newUser);
+        ws.send(JSON.stringify(newUser));
+      }
+    }
   });
 });
