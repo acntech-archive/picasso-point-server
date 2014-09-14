@@ -38,7 +38,6 @@ function doesUserExist(user) {
 wssOutput.on('connection', function (ws) {
 
   clients.push(ws);
-  console.log(ws);
   console.log('websocket output got connection');
 
   ws.on('close', function () {

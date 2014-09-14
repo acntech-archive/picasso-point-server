@@ -5,7 +5,7 @@ Build Status
 ====
 Build
 ======
-[![Build Status](https://travis-ci.org/acntech/picasso-point-server.svg?branch=develop)](https://travis-ci.org/acntech/picasso-point-server) [![Coverage Status](https://coveralls.io/repos/acntech/picasso-point-server/badge.png)](https://coveralls.io/r/acntech/picasso-point-server)
+[![Build Status](https://travis-ci.org/acntech/picasso-point-server.svg?branch=develop)](https://travis-ci.org/acntech/picasso-point-server) [![Coverage Status](https://coveralls.io/repos/acntech/picasso-point-server/badge.png?branch=develop)](https://coveralls.io/r/acntech/picasso-point-server?branch=develop)
 
 Dependencies
 ======

@@ -3,7 +3,6 @@
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
 var jshint = require('gulp-jshint');
-var coveralls = require('gulp-coveralls');
 var istanbul = require('gulp-istanbul');
 var mocha = require('gulp-mocha');
 
@@ -39,18 +38,13 @@ gulp.task('watch', function () {
   gulp.watch('tests/**/*', ['test']);
 });
 
-gulp.task('coveralls', ['test'], function () {
-  return gulp.src('coverage/lcov.info')
-    .pipe(coveralls());
-});
-
 gulp.task('clean', function (cb) {
   del(['build'], cb);
 });
 
 gulp.task('developServer', function () {
   nodemon({
-    script: 'scripts/server.js'
+    script: 'src/server.js'
   })
     .on('change', ['lint'])
     .on('restart', function () {
@@ -60,4 +54,6 @@ gulp.task('developServer', function () {
 
 gulp.task('develop', ['developServer', 'tdd']);
 
-gulp.task('default', ['lint', 'coverage']);
+gulp.task('default', ['lint', 'test']);
+
+gulp.task('build', ['lint', 'coverage']);
