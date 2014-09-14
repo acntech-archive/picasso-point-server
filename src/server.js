@@ -7,8 +7,7 @@ var express = require('express');
 var _ = require('lodash');
 var jrc = require('just.randomcolor');
 var app = express();
-var inputPort = 5000;
-var outputPort = 5001;
+var inputPort = process.env.PORT || 5000;
 
 var uniqueUsers = [];
 
@@ -17,14 +16,9 @@ app.use(express.static(__dirname + '/'));
 var inputServer = http.createServer(app);
 var outputServer = http.createServer(app);
 inputServer.listen(inputPort);
-outputServer.listen(outputPort);
 
-var wssInput = new WebSocketServer({
+var wsServer = new WebSocketServer({
   server: inputServer
-});
-
-var wssOutput = new WebSocketServer({
-  server: outputServer
 });
 
 var clients = [];
@@ -35,10 +29,13 @@ function doesUserExist(user) {
   });
 }
 
-wssOutput.on('connection', function (ws) {
+wsServer.on('connection', function (ws) {
+  console.log('websocket input got connection');
 
-  clients.push(ws);
-  console.log('websocket output got connection');
+  if (ws.protocol === 'client') {
+    clients.push(ws);
+    console.log('websocket get a client');
+  }
 
   ws.on('close', function () {
     console.log('websocket connection close');
@@ -49,35 +46,25 @@ wssOutput.on('connection', function (ws) {
     var user = JSON.parse(msg).user;
 
     /* jshint camelcase: false */
-    clients.forEach(function (e) {
-      try {
-        if (user) {
-          if (!doesUserExist(user)) {
-            uniqueUsers.push({
-              user: user,
-              color: new jrc()
-            });
+    _(clients)
+      .filter(function (e) {
+        return e.protocol === 'client';
+      })
+      .each(function (e) {
+        try {
+          if (user) {
+            if (!doesUserExist(user)) {
+              uniqueUsers.push({
+                user: user,
+                color: new jrc()
+              });
+            }
           }
+          e.send(msg);
+          console.log('sending message');
+        } catch (e) {
+          console.log('ohnnoes:' + e);
         }
-        e.send(msg);
-      } catch (e) {
-        console.log('ohnnoes:' + e);
-      }
-    });
-  });
-});
-
-var connection = new ws('ws://localhost:5001');
-
-wssInput.on('connection', function (ws) {
-  console.log('websocket input got connection');
-
-  ws.on('close', function () {
-    console.log('websocket connection close');
-  });
-
-  ws.on('message', function (msg) {
-    console.log(msg);
-    connection.send(msg);
+      });
   });
 });
