@@ -4,7 +4,6 @@ var ws = require('ws');
 var WebSocketServer = ws.Server;
 var http = require('http');
 var express = require('express');
-var _ = require('lodash');
 var app = express();
 var inputPort = 5000;
 var outputPort = 5001;
@@ -29,12 +28,6 @@ var wssOutput = new WebSocketServer({
 
 var clients = [];
 
-function doesUserExist(user) {
-  return _.pluck(uniqueUsers, {
-    user: user
-  });
-}
-
 wssOutput.on('connection', function (ws) {
 
   clients.push(ws);
@@ -45,13 +38,10 @@ wssOutput.on('connection', function (ws) {
   });
 
   ws.on('message', function (msg) {
-    console.log(msg);
-    var user = JSON.parse(msg).user;
+    var parsedMsg = JSON.parse(msg);
 
-    /* jshint camelcase: false */
     clients.forEach(function (e) {
       try {
-        msg.user = user;
         e.send(msg);
       } catch (e) {
         console.log('ohnnoes:' + e);
@@ -75,15 +65,13 @@ wssInput.on('connection', function (ws) {
     connection.send(msg);
     var user = JSON.parse(msg).user;
     if (user) {
-      if (!doesUserExist(user)) {
-        var newUser = {
-          user: '#' + uniqueUsers.length + user,
-          color: uniqueColors[uniqueUsers.length]
-        };
-        console.log('Created user: ' + newUser.user);
-        uniqueUsers.push(newUser);
-        ws.send(JSON.stringify(newUser));
-      }
+      var newUser = {
+        user: user + '#' + uniqueUsers.length,
+        color: uniqueColors[uniqueUsers.length]
+      };
+      console.log('Created user: ' + newUser.user);
+      uniqueUsers.push(newUser);
+      ws.send(JSON.stringify(newUser));
     }
   });
 });
