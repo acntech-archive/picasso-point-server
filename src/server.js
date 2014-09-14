@@ -13,6 +13,12 @@ var uniqueColors = ['#abbf72', '#72bf87', '#72bfa2', '#8ebf72', '#72bf96', '#72b
 
 app.use(express.static(__dirname + '/'));
 
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.get('/port-number', function (req, res) {
   res.send(JSON.stringify({ port: inputPort }));
 });
