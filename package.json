@@ -1,0 +1,42 @@
+{
+  "name": "IoT",
+  "version": "0.0.1",
+  "description": "Our awesome project",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SimenB/IoT.git"
+  },
+  "keywords": [
+    "iot",
+    "hot",
+    "awesomeness"
+  ],
+  "author": "Simen Bekkhus <sbekkhus91@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SimenB/IoT/issues"
+  },
+  "homepage": "https://github.com/SimenB/IoT",
+  "devDependencies": {
+    "del": "^0.1.3",
+    "gulp": "^3.8.8",
+    "gulp-coveralls": "^0.1.3",
+    "gulp-istanbul": "^0.3.0",
+    "gulp-jshint": "^1.8.4",
+    "gulp-mocha": "^1.1.0",
+    "gulp-nodemon": "^1.0.4",
+    "jshint-stylish": "^0.4.0",
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
+  },
+  "dependencies": {
+    "express": "^4.9.0",
+    "just.randomcolor": "^0.1.1",
+    "lodash": "^2.4.1",
+    "ws": "^0.4.32"
+  }
+}
